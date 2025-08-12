@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF OCR → MD</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .upload-area {
+            border: 2px dashed #dee2e6;
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .upload-area:hover { 
+            border-color: #0d6efd; 
+            background: #f0f8ff; 
+        }
+        .header-logo { 
+            font-size: 3rem; 
+            font-weight: bold; 
+            background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-family: 'Courier New', monospace;
+        }
+        .arrow { color: #6610f2; font-weight: bold; }
+        .hero { padding: 4rem 0; }
+        .feature-box {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            height: 100%;
+        }
+        .process-step {
+            text-align: center;
+            padding: 1.5rem;
+        }
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #0d6efd, #6610f2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="bg-light">
+    <!-- Hero Section -->
+    <div class="hero">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h1 class="header-logo">PDF OCR <span class="arrow">→</span> MD</h1>
+                <p class="lead">Transform Any PDF Into Clean Markdown</p>
+                <p class="text-muted">Perfect text extraction in minutes • Up to 10 pages free</p>
+            </div>
+
+            <!-- Process Steps -->
+            <div class="row mb-5">
+                <div class="col-md-4">
+                    <div class="process-step">
+                        <div class="step-icon">1</div>
+                        <h5>Upload PDF</h5>
+                        <p class="text-muted">Drag & drop or click to select</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="process-step">
+                        <div class="step-icon">2</div>
+                        <h5>OCR Process</h5>
+                        <p class="text-muted">AI extracts & formats text</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="process-step">
+                        <div class="step-icon">3</div>
+                        <h5>Download MD</h5>
+                        <p class="text-muted">Get clean Markdown file</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Upload Interface -->
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow">
+                        <div class="card-body p-4">
+                            <div class="upload-area mb-4" onclick="document.getElementById('fileInput').click()">
+                                <i class="fas fa-file-pdf fa-3x text-muted mb-3"></i>
+                                <h5>Drop PDF here or click to upload</h5>
+                                <p class="text-muted">Maximum 10 pages • Supports all layouts</p>
+                            </div>
+
+                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+
+                            <div id="fileInfo" style="display: none;" class="mb-4">
+                                <div class="alert alert-info">
+                                    <strong>File selected:</strong> <span id="fileName"></span><br>
+                                    <strong>Size:</strong> <span id="fileSize"></span>
+                                </div>
+                            </div>
+
+                            <div class="row mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label">Processing Mode</label>
+                                    <select class="form-select" id="processingMode">
+                                        <option value="chunked">Smart OCR (Recommended)</option>
+                                        <option value="two_column">Two-Column Documents</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">AI Model</label>
+                                    <select class="form-select" id="aiModel">
+                                        <option value="gpt5mini">GPT-5 Mini (Fastest)</option>
+                                        <option value="chatgpt">GPT-4 Vision</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="text-center">
+                                <button class="btn btn-primary btn-lg" id="processBtn" disabled onclick="processFile()">
+                                    <i class="fas fa-magic me-2"></i>Start OCR Processing
+                                </button>
+                            </div>
+
+                            <div id="processing" style="display: none;" class="mt-4">
+                                <div class="text-center">
+                                    <div class="spinner-border text-primary mb-3"></div>
+                                    <h5>Processing your document...</h5>
+                                    <p class="text-muted">This may take a few minutes</p>
+                                </div>
+                            </div>
+
+                            <div id="result" style="display: none;" class="mt-4">
+                                <div class="alert alert-success">
+                                    <h5>✅ Processing Complete!</h5>
+                                    <p>Your PDF has been converted to clean Markdown.</p>
+                                    <button class="btn btn-success" id="downloadBtn">
+                                        <i class="fas fa-download me-2"></i>Download Markdown
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div id="error" style="display: none;" class="mt-4">
+                                <div class="alert alert-danger">
+                                    <h5>❌ Error</h5>
+                                    <p id="errorMessage"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h5><i class="fas fa-columns text-primary me-2"></i>Smart Layout Detection</h5>
+                    <p>Handles single columns, double columns, and mixed layouts automatically.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h5><i class="fas fa-brain text-primary me-2"></i>AI-Powered OCR</h5>
+                    <p>Uses latest GPT-5 Mini and GPT-4 Vision for superior text extraction.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="feature-box">
+                    <h5><i class="fas fa-markdown text-primary me-2"></i>Perfect Markdown</h5>
+                    <p>Outputs clean, properly formatted Markdown with preserved structure.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-light py-4">
+        <div class="container text-center">
+            <p class="mb-2">Made with ❤️ for perfect PDF text extraction</p>
+            <p class="small text-muted">Running locally with full OCR processing</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        let selectedFile = null;
+        let resultFile = null;
+
+        function handleFileSelect(file) {
+            if (file && file.type === 'application/pdf') {
+                selectedFile = file;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+                document.getElementById('fileInfo').style.display = 'block';
+                document.getElementById('processBtn').disabled = false;
+            } else {
+                alert('Please select a PDF file');
+            }
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            handleFileSelect(file);
+        });
+
+        // Drag and drop functionality
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#0d6efd';
+            this.style.backgroundColor = '#f0f8ff';
+        });
+
+        uploadArea.addEventListener('dragleave', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#dee2e6';
+            this.style.backgroundColor = '';
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.style.borderColor = '#dee2e6';
+            this.style.backgroundColor = '';
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        async function processFile() {
+            if (!selectedFile) return;
+
+            const formData = new FormData();
+            formData.append('file', selectedFile);
+            formData.append('mode', document.getElementById('processingMode').value);
+            formData.append('model', document.getElementById('aiModel').value);
+
+            document.getElementById('processing').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('error').style.display = 'none';
+            document.getElementById('processBtn').disabled = true;
+
+            try {
+                console.log('Sending request to /process...');
+                const response = await fetch('/process', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('Response status:', response.status);
+                console.log('Response headers:', response.headers);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log('Response data:', data);
+
+                if (data.success) {
+                    resultFile = data.filename;
+                    document.getElementById('result').style.display = 'block';
+                    document.getElementById('downloadBtn').onclick = () => {
+                        window.location.href = `/download/${resultFile}`;
+                    };
+                } else {
+                    throw new Error(data.error || 'Processing failed');
+                }
+            } catch (error) {
+                console.error('Fetch error:', error);
+                document.getElementById('errorMessage').innerHTML = `
+                    <strong>Error Details:</strong><br>
+                    ${error.message}<br><br>
+                    <small>Check browser console (F12) for more details</small>
+                `;
+                document.getElementById('error').style.display = 'block';
+            } finally {
+                document.getElementById('processing').style.display = 'none';
+                document.getElementById('processBtn').disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

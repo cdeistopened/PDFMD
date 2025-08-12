@@ -1,0 +1,21 @@
+# PDF OCR → MD Dependencies
+# Complete Flask app with AI OCR processing
+
+# Web framework
+Flask>=2.3.0
+Werkzeug>=2.3.0
+
+# PDF processing
+PyMuPDF>=1.23.0
+Pillow>=10.0.0
+
+# AI/OCR
+openai>=1.12.0
+anthropic>=0.7.0
+
+# Environment and utilities  
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Production server (optional)
+gunicorn>=21.0.0
