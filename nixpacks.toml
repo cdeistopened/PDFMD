@@ -1,0 +1,5 @@
+[providers]
+python = "3.10"
+
+[start]
+cmd = "python app.py"
