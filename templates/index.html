@@ -111,19 +111,28 @@
                             </div>
 
                             <div class="row mb-4">
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label">Processing Mode</label>
                                     <select class="form-select" id="processingMode">
                                         <option value="chunked">Smart OCR (Recommended)</option>
                                         <option value="two_column">Two-Column Documents</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="form-label">AI Model</label>
                                     <select class="form-select" id="aiModel">
                                         <option value="gpt5mini">GPT-5 Mini (Fastest)</option>
                                         <option value="chatgpt">GPT-4 Vision</option>
                                     </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">OCR Options</label>
+                                    <div class="form-check mt-2">
+                                        <input class="form-check-input" type="checkbox" id="preserveFootnotes" checked>
+                                        <label class="form-check-label" for="preserveFootnotes">
+                                            Preserve footnotes in Markdown
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
@@ -255,6 +264,7 @@
             formData.append('file', selectedFile);
             formData.append('mode', document.getElementById('processingMode').value);
             formData.append('model', document.getElementById('aiModel').value);
+            formData.append('preserve_footnotes', document.getElementById('preserveFootnotes').checked);
 
             document.getElementById('processing').style.display = 'block';
             document.getElementById('result').style.display = 'none';
