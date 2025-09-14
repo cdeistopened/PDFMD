@@ -73,7 +73,7 @@ class ChunkedOCRProcessor:
             raise ValueError("OpenAI API key required. Set OPENAI_API_KEY environment variable.")
         
         # Simple, effective OCR prompt (tested and optimized)
-        self.ocr_prompt = "Give me a clean Markdown-formatted transcription of this PDF page. Include all text, preserve structure, and use proper Markdown formatting."
+        self.ocr_prompt = "Transcribe this PDF page to clean Markdown. Preserve text, structure, and header hierarchy. Convert any footnotes to Markdown format: use [^1], [^2] markers in text and [^1]: definitions at bottom."
     
     def pdf_to_images(self, pdf_path: str, start_page: int = 0, end_page: int = None) -> list:
         """Convert PDF pages to images (no splitting by default)."""
@@ -142,7 +142,7 @@ class ChunkedOCRProcessor:
         
         try:
             response = self.client.chat.completions.create(
-                model="gpt-5-mini",  # Latest GPT-5 Mini
+                model="gpt-4o-mini",  # Using GPT-4o Mini as GPT-5 Mini not yet available
                 max_completion_tokens=16000,  # High limit for complete capture
                 messages=messages
             )
@@ -162,14 +162,31 @@ class ChunkedOCRProcessor:
                 "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
             }
     
+    def clean_llm_output(self, text: str) -> str:
+        """Remove markdown code block wrappers from LLM output."""
+        # Remove opening ```markdown and closing ``` 
+        text = text.strip()
+        if text.startswith('```markdown'):
+            text = text[11:].strip()  # Remove ```markdown
+        elif text.startswith('```'):
+            text = text[3:].strip()   # Remove ```
+        
+        if text.endswith('```'):
+            text = text[:-3].strip()  # Remove closing ```
+            
+        return text
+    
     def save_chunk_result(self, result: Dict, output_file: str, chunk_index: int):
         """Save processing results to output file."""
         if result["success"]:
+            # Clean the LLM output to remove code block wrappers
+            cleaned_text = self.clean_llm_output(result["text"])
+            
             with open(output_file, 'a', encoding='utf-8') as f:
                 if chunk_index == 0:
                     f.write(f"# OCR Results\n\n")
                 f.write(f"## Pages {result['page_range']}\n\n")
-                f.write(result["text"])
+                f.write(cleaned_text)
                 f.write("\n\n---\n\n")
             
             logger.info(f"✅ Pages {result['page_range']} completed")

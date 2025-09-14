@@ -71,11 +71,6 @@ def process_pdf():
                 result_path = processor.process_pdf(temp_path, start_page=1, end_page=10)  # Max 10 pages
             else:  # chunked (default)
                 processor = ChunkedOCRProcessor(chunk_size=1)  # One page at a time
-                
-                # Enhance prompt for footnote preservation if enabled
-                if preserve_footnotes:
-                    processor.ocr_prompt += " CRITICAL: Do NOT create any footnote markers ([^1], [^2], etc.) unless you can clearly see actual footnote numbers or symbols in the original image that need to be preserved. Most documents have NO footnotes - only add footnote markers if you see obvious footnote references like tiny superscript numbers in the text or numbered footnote lists at the bottom. When in doubt, do NOT add footnotes."
-                
                 result_path = processor.process_pdf(temp_path, start_page=0, max_pages=10)
             
             # Clean up temp PDF

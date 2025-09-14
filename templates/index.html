@@ -3,262 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF OCR → MD</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <title>PDFMD – Professional Document Processing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css">
+    <script src="https://unpkg.com/feather-icons"></script>
     <style>
+        :root {
+            --primary-50: #f8fafc;
+            --primary-100: #f1f5f9;
+            --primary-200: #e2e8f0;
+            --primary-300: #cbd5e1;
+            --primary-400: #94a3b8;
+            --primary-500: #64748b;
+            --primary-600: #475569;
+            --primary-700: #334155;
+            --primary-800: #1e293b;
+            --primary-900: #0f172a;
+            --accent: #3b82f6;
+            --accent-light: #dbeafe;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--primary-50) 0%, #ffffff 100%);
+            color: var(--primary-700);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Header */
+        .header {
+            padding: 32px 0;
+            border-bottom: 1px solid var(--primary-200);
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-900);
+            letter-spacing: -0.025em;
+        }
+
+        .logo-accent {
+            color: var(--accent);
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: var(--primary-600);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+        /* Main Content */
+        .main {
+            padding: 64px 0;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 64px;
+        }
+
+        .hero-title {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-900);
+            letter-spacing: -0.025em;
+            margin-bottom: 16px;
+            line-height: 1.1;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: var(--primary-600);
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: var(--primary-500);
+            margin-bottom: 48px;
+        }
+
+        /* Upload Section */
+        .upload-section {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--primary-200);
+            padding: 48px;
+            margin-bottom: 48px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
         .upload-area {
-            border: 2px dashed #dee2e6;
-            border-radius: 15px;
-            padding: 3rem;
+            border: 2px dashed var(--primary-300);
+            border-radius: 12px;
+            padding: 48px 32px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            background: var(--primary-50);
         }
-        .upload-area:hover { 
-            border-color: #0d6efd; 
-            background: #f0f8ff; 
+
+        .upload-area:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
         }
-        .header-logo { 
-            font-size: 3rem; 
-            font-weight: bold; 
-            background: linear-gradient(135deg, #0d6efd 0%, #6610f2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: 'Courier New', monospace;
+
+        .upload-area.drag-over {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            transform: scale(1.01);
         }
-        .arrow { color: #6610f2; font-weight: bold; }
-        .hero { padding: 4rem 0; }
-        .feature-box {
+
+        .upload-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            color: var(--primary-400);
+        }
+
+        .upload-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--primary-700);
+            margin-bottom: 8px;
+        }
+
+        .upload-hint {
+            font-size: 14px;
+            color: var(--primary-500);
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-selected {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--primary-50);
+            border-radius: 8px;
+            margin-top: 16px;
+            border: 1px solid var(--primary-200);
+        }
+
+        .file-icon {
+            width: 20px;
+            height: 20px;
+            color: var(--accent);
+        }
+
+        /* Settings */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .setting-group {
             background: white;
-            border-radius: 10px;
-            padding: 2rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-            height: 100%;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid var(--primary-200);
         }
-        .process-step {
-            text-align: center;
-            padding: 1.5rem;
+
+        .setting-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-700);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-        .step-icon {
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, #0d6efd, #6610f2);
-            border-radius: 50%;
+
+        .setting-icon {
+            width: 16px;
+            height: 16px;
+        }
+
+        .form-select, .form-control {
+            border: 1px solid var(--primary-300);
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            background: white;
+            transition: border-color 0.2s ease;
+            width: 100%;
+        }
+
+        .form-select:focus, .form-control:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-check {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-check-input {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--primary-300);
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .form-check-input:checked {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .form-check-label {
+            font-size: 14px;
+            color: var(--primary-600);
+            cursor: pointer;
+        }
+
+        /* Process Button */
+        .process-button {
+            width: 100%;
+            padding: 16px 32px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 1rem;
-            color: white;
-            font-size: 1.5rem;
-            font-weight: bold;
+            gap: 12px;
+        }
+
+        .process-button:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .process-button:disabled {
+            background: var(--primary-300);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .process-button .loading {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Status Messages */
+        .status-message {
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin: 16px 0;
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .status-success {
+            background: #ecfdf5;
+            border: 1px solid #d1fae5;
+            color: #065f46;
+        }
+
+        .status-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #991b1b;
+        }
+
+        .status-processing {
+            background: #eff6ff;
+            border: 1px solid #dbeafe;
+            color: #1e40af;
+        }
+
+        /* Features Grid */
+        .features {
+            margin-top: 80px;
+        }
+
+        .features-title {
+            text-align: center;
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--primary-900);
+            margin-bottom: 48px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 32px;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            border: 1px solid var(--primary-200);
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 20px;
+            color: var(--accent);
+        }
+
+        .feature-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-900);
+            margin-bottom: 12px;
+        }
+
+        .feature-description {
+            font-size: 14px;
+            color: var(--primary-600);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 16px;
+            }
+
+            .hero-title {
+                font-size: 36px;
+            }
+
+            .hero-subtitle {
+                font-size: 18px;
+            }
+
+            .upload-section {
+                padding: 32px 24px;
+            }
+
+            .upload-area {
+                padding: 32px 20px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .features {
+                margin-top: 64px;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+                gap: 24px;
+            }
+
+            .feature-card {
+                padding: 24px;
+            }
         }
     </style>
 </head>
-<body class="bg-light">
-    <!-- Hero Section -->
-    <div class="hero">
+<body>
+    <div class="header">
         <div class="container">
-            <div class="text-center mb-5">
-                <h1 class="header-logo">PDF OCR <span class="arrow">→</span> MD</h1>
-                <p class="lead">Transform Any PDF Into Clean Markdown</p>
-                <p class="text-muted">Perfect text extraction in minutes • Up to 10 pages free</p>
-            </div>
-
-            <!-- Process Steps -->
-            <div class="row mb-5">
-                <div class="col-md-4">
-                    <div class="process-step">
-                        <div class="step-icon">1</div>
-                        <h5>Upload PDF</h5>
-                        <p class="text-muted">Drag & drop or click to select</p>
-                    </div>
+            <div class="header-content">
+                <div class="logo">
+                    PDF<span class="logo-accent">MD</span>
                 </div>
-                <div class="col-md-4">
-                    <div class="process-step">
-                        <div class="step-icon">2</div>
-                        <h5>OCR Process</h5>
-                        <p class="text-muted">AI extracts & formats text</p>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="process-step">
-                        <div class="step-icon">3</div>
-                        <h5>Download MD</h5>
-                        <p class="text-muted">Get clean Markdown file</p>
-                    </div>
+                <div class="status-indicator">
+                    <div class="status-dot"></div>
+                    <span>System Ready</span>
                 </div>
             </div>
+        </div>
+    </div>
 
-            <!-- Upload Interface -->
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <div class="card shadow">
-                        <div class="card-body p-4">
-                            <div class="upload-area mb-4" onclick="document.getElementById('fileInput').click()">
-                                <i class="fas fa-file-pdf fa-3x text-muted mb-3"></i>
-                                <h5>Drop PDF here or click to upload</h5>
-                                <p class="text-muted">Maximum 10 pages • Supports all layouts</p>
-                            </div>
+    <div class="main">
+        <div class="container">
+            <div class="hero">
+                <h1 class="hero-title">Document Processing</h1>
+                <p class="hero-subtitle">Transform PDFs into clean, structured Markdown</p>
+                <p class="hero-description">Professional-grade OCR with footnote preservation and intelligent formatting</p>
+            </div>
 
-                            <input type="file" id="fileInput" accept=".pdf" style="display: none;">
+            <div class="upload-section">
+                <div class="upload-area" onclick="document.getElementById('fileInput').click()" 
+                     ondragover="handleDragOver(event)" 
+                     ondrop="handleDrop(event)" 
+                     ondragleave="handleDragLeave(event)">
+                    <i data-feather="upload" class="upload-icon"></i>
+                    <div class="upload-text">Select PDF document</div>
+                    <div class="upload-hint">or drag and drop here</div>
+                    <input type="file" id="fileInput" accept=".pdf" onchange="handleFileSelect(event)">
+                </div>
+                <div id="fileSelected" class="file-selected" style="display: none;">
+                    <i data-feather="file-text" class="file-icon"></i>
+                    <span id="fileName"></span>
+                </div>
+            </div>
 
-                            <div id="fileInfo" style="display: none;" class="mb-4">
-                                <div class="alert alert-info">
-                                    <strong>File selected:</strong> <span id="fileName"></span><br>
-                                    <strong>Size:</strong> <span id="fileSize"></span>
-                                </div>
-                            </div>
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <i data-feather="settings" class="setting-icon"></i>
+                        Processing Mode
+                    </label>
+                    <select class="form-select" id="processingMode">
+                        <option value="chunked">Sequential Processing</option>
+                        <option value="two_column">Two Column Layout</option>
+                    </select>
+                </div>
 
-                            <div class="row mb-4">
-                                <div class="col-md-4">
-                                    <label class="form-label">Processing Mode</label>
-                                    <select class="form-select" id="processingMode">
-                                        <option value="chunked">Smart OCR (Recommended)</option>
-                                        <option value="two_column">Two-Column Documents</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">AI Model</label>
-                                    <select class="form-select" id="aiModel">
-                                        <option value="gpt5mini">GPT-5 Mini (Fastest)</option>
-                                        <option value="chatgpt">GPT-4 Vision</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">OCR Options</label>
-                                    <div class="form-check mt-2">
-                                        <input class="form-check-input" type="checkbox" id="preserveFootnotes" checked>
-                                        <label class="form-check-label" for="preserveFootnotes">
-                                            Preserve footnotes in Markdown
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <i data-feather="cpu" class="setting-icon"></i>
+                        AI Model
+                    </label>
+                    <select class="form-select" id="aiModel">
+                        <option value="gpt4o-mini">GPT-4o Mini (Recommended)</option>
+                        <option value="gpt4">GPT-4</option>
+                    </select>
+                </div>
 
-                            <div class="text-center">
-                                <button class="btn btn-primary btn-lg" id="processBtn" disabled onclick="processFile()">
-                                    <i class="fas fa-magic me-2"></i>Start OCR Processing
-                                </button>
-                            </div>
+                <div class="setting-group">
+                    <label class="setting-label">
+                        <i data-feather="bookmark" class="setting-icon"></i>
+                        Content Options
+                    </label>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="preserveFootnotes" checked>
+                        <label class="form-check-label" for="preserveFootnotes">
+                            Preserve footnotes in Markdown format
+                        </label>
+                    </div>
+                </div>
+            </div>
 
-                            <div id="processing" style="display: none;" class="mt-4">
-                                <div class="text-center">
-                                    <div class="spinner-border text-primary mb-3"></div>
-                                    <h5>Processing your document...</h5>
-                                    <p class="text-muted">This may take a few minutes</p>
-                                </div>
-                            </div>
+            <button class="process-button" id="processBtn" disabled onclick="processFile()">
+                <i data-feather="play" style="width: 20px; height: 20px;"></i>
+                Begin Processing
+            </button>
 
-                            <div id="result" style="display: none;" class="mt-4">
-                                <div class="alert alert-success">
-                                    <h5>✅ Processing Complete!</h5>
-                                    <p>Your PDF has been converted to clean Markdown.</p>
-                                    <button class="btn btn-success" id="downloadBtn">
-                                        <i class="fas fa-download me-2"></i>Download Markdown
-                                    </button>
-                                </div>
-                            </div>
+            <div id="statusProcessing" class="status-message status-processing">
+                <div class="loading"></div>
+                <span>Processing your document...</span>
+            </div>
 
-                            <div id="error" style="display: none;" class="mt-4">
-                                <div class="alert alert-danger">
-                                    <h5>❌ Error</h5>
-                                    <p id="errorMessage"></p>
-                                </div>
-                            </div>
-                        </div>
+            <div id="statusSuccess" class="status-message status-success">
+                <i data-feather="check-circle" style="width: 20px; height: 20px;"></i>
+                <span>Processing complete! <a href="#" id="downloadLink">Download your file</a></span>
+            </div>
+
+            <div id="statusError" class="status-message status-error">
+                <i data-feather="alert-circle" style="width: 20px; height: 20px;"></i>
+                <span id="errorMessage">Processing failed. Please try again.</span>
+            </div>
+
+            <div class="features">
+                <h2 class="features-title">Capabilities</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i data-feather="file-text" class="feature-icon"></i>
+                        <div class="feature-title">Intelligent OCR</div>
+                        <div class="feature-description">Advanced text recognition with context understanding and structure preservation</div>
+                    </div>
+                    <div class="feature-card">
+                        <i data-feather="bookmark" class="feature-icon"></i>
+                        <div class="feature-title">Footnote Detection</div>
+                        <div class="feature-description">Automatic conversion of footnotes to proper Markdown syntax with references</div>
+                    </div>
+                    <div class="feature-card">
+                        <i data-feather="layout" class="feature-icon"></i>
+                        <div class="feature-title">Format Preservation</div>
+                        <div class="feature-description">Maintains document hierarchy, tables, and formatting in clean Markdown</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Features Section -->
-    <div class="container py-5">
-        <div class="row">
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <h5><i class="fas fa-columns text-primary me-2"></i>Smart Layout Detection</h5>
-                    <p>Handles single columns, double columns, and mixed layouts automatically.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <h5><i class="fas fa-brain text-primary me-2"></i>AI-Powered OCR</h5>
-                    <p>Uses latest GPT-5 Mini and GPT-4 Vision for superior text extraction.</p>
-                </div>
-            </div>
-            <div class="col-md-4">
-                <div class="feature-box">
-                    <h5><i class="fas fa-markdown text-primary me-2"></i>Perfect Markdown</h5>
-                    <p>Outputs clean, properly formatted Markdown with preserved structure.</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-light py-4">
-        <div class="container text-center">
-            <p class="mb-2">Made with ❤️ for perfect PDF text extraction</p>
-            <p class="small text-muted">Running locally with full OCR processing</p>
-        </div>
-    </footer>
-
-    <!-- Scripts -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <script>
         let selectedFile = null;
-        let resultFile = null;
 
-        function handleFileSelect(file) {
+        // Initialize Feather icons
+        feather.replace();
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
             if (file && file.type === 'application/pdf') {
                 selectedFile = file;
-                document.getElementById('fileName').textContent = file.name;
-                document.getElementById('fileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
-                document.getElementById('fileInfo').style.display = 'block';
+                showSelectedFile(file.name);
                 document.getElementById('processBtn').disabled = false;
-            } else {
-                alert('Please select a PDF file');
             }
         }
 
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            handleFileSelect(file);
-        });
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('drag-over');
+        }
 
-        // Drag and drop functionality
-        const uploadArea = document.querySelector('.upload-area');
-        
-        uploadArea.addEventListener('dragover', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.style.borderColor = '#0d6efd';
-            this.style.backgroundColor = '#f0f8ff';
-        });
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('drag-over');
+        }
 
-        uploadArea.addEventListener('dragleave', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.style.borderColor = '#dee2e6';
-            this.style.backgroundColor = '';
-        });
-
-        uploadArea.addEventListener('drop', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.style.borderColor = '#dee2e6';
-            this.style.backgroundColor = '';
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('drag-over');
             
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
+            const files = event.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'application/pdf') {
+                selectedFile = files[0];
+                showSelectedFile(files[0].name);
+                document.getElementById('processBtn').disabled = false;
             }
-        });
+        }
+
+        function showSelectedFile(fileName) {
+            document.getElementById('fileName').textContent = fileName;
+            document.getElementById('fileSelected').style.display = 'flex';
+            feather.replace();
+        }
+
+        function hideStatusMessages() {
+            document.getElementById('statusProcessing').style.display = 'none';
+            document.getElementById('statusSuccess').style.display = 'none';
+            document.getElementById('statusError').style.display = 'none';
+        }
 
         async function processFile() {
             if (!selectedFile) return;
+
+            hideStatusMessages();
+            document.getElementById('statusProcessing').style.display = 'flex';
+            document.getElementById('processBtn').disabled = true;
 
             const formData = new FormData();
             formData.append('file', selectedFile);
@@ -266,48 +598,30 @@
             formData.append('model', document.getElementById('aiModel').value);
             formData.append('preserve_footnotes', document.getElementById('preserveFootnotes').checked);
 
-            document.getElementById('processing').style.display = 'block';
-            document.getElementById('result').style.display = 'none';
-            document.getElementById('error').style.display = 'none';
-            document.getElementById('processBtn').disabled = true;
-
             try {
-                console.log('Sending request to /process...');
                 const response = await fetch('/process', {
                     method: 'POST',
                     body: formData
                 });
 
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-
-                if (!response.ok) {
-                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-                }
-
-                const data = await response.json();
-                console.log('Response data:', data);
-
-                if (data.success) {
-                    resultFile = data.filename;
-                    document.getElementById('result').style.display = 'block';
-                    document.getElementById('downloadBtn').onclick = () => {
-                        window.location.href = `/download/${resultFile}`;
-                    };
+                const result = await response.json();
+                
+                hideStatusMessages();
+                
+                if (result.success) {
+                    document.getElementById('downloadLink').href = `/download/${result.filename}`;
+                    document.getElementById('statusSuccess').style.display = 'flex';
                 } else {
-                    throw new Error(data.error || 'Processing failed');
+                    document.getElementById('errorMessage').textContent = result.error || 'Processing failed';
+                    document.getElementById('statusError').style.display = 'flex';
                 }
             } catch (error) {
-                console.error('Fetch error:', error);
-                document.getElementById('errorMessage').innerHTML = `
-                    <strong>Error Details:</strong><br>
-                    ${error.message}<br><br>
-                    <small>Check browser console (F12) for more details</small>
-                `;
-                document.getElementById('error').style.display = 'block';
+                hideStatusMessages();
+                document.getElementById('errorMessage').textContent = 'Network error occurred';
+                document.getElementById('statusError').style.display = 'flex';
             } finally {
-                document.getElementById('processing').style.display = 'none';
                 document.getElementById('processBtn').disabled = false;
+                feather.replace();
             }
         }
     </script>
