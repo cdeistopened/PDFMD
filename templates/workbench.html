@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDFMD Workbench – Batch Document Processing</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/base.css" />
+    <link rel="stylesheet" href="/static/css/workbench.css" />
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">PDF<span class="logo-accent">MD</span> Workbench</div>
+                <div class="nav-tabs">
+                    <a href="/" class="nav-tab">Quick Process</a>
+                    <a href="/workbench" class="nav-tab active">Workbench</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="main">
+        <div class="container">
+            <div class="upload-section">
+                <div class="upload-header">
+                    <div class="upload-title">Upload Document for Batch Processing</div>
+                </div>
+                <form class="upload-form" id="uploadForm" onsubmit="uploadDocument(event)">
+                    <div class="form-group" style="flex: 2;">
+                        <label class="form-label">PDF Document</label>
+                        <input type="file" class="form-input" id="pdfFile" accept=".pdf" required>
+                    </div>
+                    <div class="form-group" style="flex: 0 0 150px;">
+                        <label class="form-label">Pages per Batch</label>
+                        <input type="number" class="form-input" id="batchSize" value="5" min="1" max="20">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="margin-bottom: 0;">
+                        <i data-feather="upload" style="width: 16px; height: 16px;"></i>
+                        Upload
+                    </button>
+                </form>
+            </div>
+
+            <div id="documentsList">
+                <div class="empty-state">
+                    <i data-feather="inbox" style="width: 64px; height: 64px;"></i>
+                    <p>No documents yet. Upload a PDF to get started.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Markdown Preview Modal -->
+    <div id="previewModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title" id="previewTitle">Markdown Preview</div>
+                <button class="modal-close" onclick="closePreview()">
+                    <i data-feather="x" style="width: 20px; height: 20px;"></i>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="previewContent" class="markdown-preview"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/workbench.js"></script>
+</body>
+</html>

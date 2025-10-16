@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PDFMD – Professional Document Processing</title>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.css"
+        />
+        <link rel="stylesheet" href="/static/css/base.css" />
+        <link rel="stylesheet" href="/static/css/index.css" />
+        <script src="https://unpkg.com/feather-icons"></script>
+    </head>
+    <body>
+        <div class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        PDF<span class="logo-accent">MD</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 16px">
+                        <a
+                            href="/workbench"
+                            style="
+                                text-decoration: none;
+                                color: var(--accent);
+                                font-size: 14px;
+                                font-weight: 500;
+                            "
+                        >
+                            <i
+                                data-feather="layers"
+                                style="
+                                    width: 16px;
+                                    height: 16px;
+                                    vertical-align: middle;
+                                "
+                            ></i>
+                            Workbench
+                        </a>
+                        <div class="status-indicator">
+                            <div class="status-dot"></div>
+                            <span>System Ready</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="main">
+            <div class="container">
+                <div class="hero">
+                    <h1 class="hero-title">
+                        AI-Powered OCR That Actually Works
+                    </h1>
+                    <p class="hero-subtitle">
+                        Convert scanned documents to perfectly accurate Markdown
+                    </p>
+                    <p class="hero-description">
+                        Outperforms ABBYY FineReader and Adobe Acrobat's OCR
+                        capabilities. Preserves footnotes, tables, and
+                        formatting.
+                    </p>
+                </div>
+
+                <div class="upload-section">
+                    <div
+                        class="upload-area"
+                        onclick="document.getElementById('fileInput').click()"
+                        ondragover="handleDragOver(event)"
+                        ondrop="handleDrop(event)"
+                        ondragleave="handleDragLeave(event)"
+                    >
+                        <i data-feather="upload" class="upload-icon"></i>
+                        <div class="upload-text">Select PDF document</div>
+                        <div class="upload-hint">or drag and drop here</div>
+                        <input
+                            type="file"
+                            id="fileInput"
+                            accept=".pdf"
+                            onchange="handleFileSelect(event)"
+                        />
+                    </div>
+                    <div
+                        id="fileSelected"
+                        class="file-selected"
+                        style="display: none"
+                    >
+                        <i data-feather="file-text" class="file-icon"></i>
+                        <span id="fileName"></span>
+                    </div>
+                </div>
+
+                <button
+                    class="process-button"
+                    id="processBtn"
+                    disabled
+                    onclick="processFile()"
+                >
+                    <i
+                        data-feather="play"
+                        style="width: 20px; height: 20px"
+                    ></i>
+                    Begin Processing
+                </button>
+
+                <div
+                    id="statusProcessing"
+                    class="status-message status-processing"
+                >
+                    <div style="width: 100%">
+                        <div
+                            style="
+                                display: flex;
+                                align-items: center;
+                                gap: 12px;
+                                margin-bottom: 8px;
+                            "
+                        >
+                            <div class="loading"></div>
+                            <span id="processingMessage"
+                                >Processing your document...</span
+                            >
+                        </div>
+                        <div
+                            style="
+                                background: var(--primary-200);
+                                border-radius: 8px;
+                                height: 8px;
+                                overflow: hidden;
+                            "
+                        >
+                            <div
+                                id="progressBar"
+                                style="
+                                    background: var(--accent);
+                                    height: 100%;
+                                    width: 0%;
+                                    transition: width 0.3s ease;
+                                "
+                            ></div>
+                        </div>
+                        <div
+                            id="pageStatus"
+                            style="
+                                font-size: 12px;
+                                color: var(--primary-600);
+                                margin-top: 4px;
+                            "
+                        >
+                            Page 0 of 0
+                        </div>
+                    </div>
+                </div>
+
+                <div id="statusSuccess" class="status-message status-success">
+                    <i
+                        data-feather="check-circle"
+                        style="width: 20px; height: 20px"
+                    ></i>
+                    <span
+                        >Processing complete!
+                        <a href="#" id="downloadLink">Download</a> •
+                        <a
+                            href="#"
+                            id="previewLink"
+                            onclick="previewResult(event)"
+                            >Preview</a
+                        ></span
+                    >
+                </div>
+
+                <div id="statusError" class="status-message status-error">
+                    <i
+                        data-feather="alert-circle"
+                        style="width: 20px; height: 20px"
+                    ></i>
+                    <span id="errorMessage"
+                        >Processing failed. Please try again.</span
+                    >
+                </div>
+
+                <div class="features">
+                    <h2 class="features-title">Why Choose AI-Powered OCR?</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <i data-feather="zap" class="feature-icon"></i>
+                            <div class="feature-title">Superior Accuracy</div>
+                            <div class="feature-description">
+                                GPT-5 Mini understands context, fixing errors
+                                that trip up traditional OCR engines
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <i data-feather="bookmark" class="feature-icon"></i>
+                            <div class="feature-title">Smart Footnotes</div>
+                            <div class="feature-description">
+                                Automatically detects and converts footnotes to
+                                proper Markdown format with preserved references
+                            </div>
+                        </div>
+                        <div class="feature-card">
+                            <i data-feather="layout" class="feature-icon"></i>
+                            <div class="feature-title">Structure Intact</div>
+                            <div class="feature-description">
+                                Preserves headings, tables, lists, and
+                                formatting—perfect for academic papers and
+                                reports
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="/static/js/index.js"></script>
+
+        <!-- Markdown Preview Modal -->
+        <div
+            id="previewModal"
+            style="
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+            "
+        >
+            <div
+                style="
+                    background: white;
+                    border-radius: 12px;
+                    max-width: 900px;
+                    width: 100%;
+                    max-height: 80vh;
+                    overflow: hidden;
+                    display: flex;
+                    flex-direction: column;
+                "
+            >
+                <div
+                    style="
+                        padding: 20px 24px;
+                        border-bottom: 1px solid var(--primary-200);
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                    "
+                >
+                    <div
+                        style="
+                            font-size: 18px;
+                            font-weight: 600;
+                            color: var(--primary-900);
+                        "
+                    >
+                        Markdown Preview
+                    </div>
+                    <button
+                        onclick="closePreview()"
+                        style="
+                            background: none;
+                            border: none;
+                            cursor: pointer;
+                            padding: 4px;
+                            color: var(--primary-500);
+                        "
+                    >
+                        <i
+                            data-feather="x"
+                            style="width: 20px; height: 20px"
+                        ></i>
+                    </button>
+                </div>
+                <div
+                    id="previewContent"
+                    style="
+                        padding: 24px;
+                        overflow-y: auto;
+                        flex: 1;
+                        font-size: 15px;
+                        line-height: 1.7;
+                        color: var(--primary-700);
+                    "
+                ></div>
+            </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    </body>
+</html>

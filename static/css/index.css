@@ -1,0 +1,233 @@
+.status-indicator {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    color: var(--primary-600);
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+}
+
+/* Main Content */
+.main {
+    padding: 64px 0;
+}
+
+.hero {
+    text-align: center;
+    margin-bottom: 64px;
+}
+
+.hero-title {
+    font-size: 48px;
+    font-weight: 700;
+    color: var(--primary-900);
+    letter-spacing: -0.025em;
+    margin-bottom: 16px;
+    line-height: 1.1;
+}
+
+.hero-subtitle {
+    font-size: 20px;
+    color: var(--primary-600);
+    margin-bottom: 8px;
+    font-weight: 400;
+}
+
+.hero-description {
+    font-size: 16px;
+    color: var(--primary-500);
+    margin-bottom: 48px;
+}
+
+/* Upload Section */
+.upload-section {
+    background: white;
+    border-radius: 16px;
+    border: 1px solid var(--primary-200);
+    padding: 48px;
+    margin-bottom: 48px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.upload-area {
+    border: 2px dashed var(--primary-300);
+    border-radius: 12px;
+    padding: 48px 32px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: var(--primary-50);
+}
+
+.upload-area:hover {
+    border-color: var(--accent);
+    background: var(--accent-light);
+}
+
+.upload-area.drag-over {
+    border-color: var(--accent);
+    background: var(--accent-light);
+    transform: scale(1.01);
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 16px;
+    color: var(--primary-400);
+}
+
+.upload-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--primary-700);
+    margin-bottom: 8px;
+}
+
+.upload-hint {
+    font-size: 14px;
+    color: var(--primary-500);
+}
+
+#fileInput {
+    display: none;
+}
+
+.file-selected {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+    background: var(--primary-50);
+    border-radius: 8px;
+    margin-top: 16px;
+    border: 1px solid var(--primary-200);
+}
+
+.file-icon {
+    width: 20px;
+    height: 20px;
+    color: var(--accent);
+}
+
+/* Process Button */
+.process-button {
+    width: 100%;
+    padding: 16px 32px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+}
+
+.process-button:hover {
+    background: #2563eb;
+    transform: translateY(-1px);
+}
+
+.process-button:disabled {
+    background: var(--primary-300);
+    cursor: not-allowed;
+    transform: none;
+}
+
+.process-button .loading {
+    width: 20px;
+    height: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+/* Features Grid */
+.features {
+    margin-top: 80px;
+}
+
+.features-title {
+    text-align: center;
+    font-size: 32px;
+    font-weight: 600;
+    color: var(--primary-900);
+    margin-bottom: 48px;
+}
+
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 32px;
+}
+
+.feature-card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    border: 1px solid var(--primary-200);
+    text-align: center;
+}
+
+.feature-icon {
+    width: 48px;
+    height: 48px;
+    margin: 0 auto 20px;
+    color: var(--accent);
+}
+
+.feature-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--primary-900);
+    margin-bottom: 12px;
+}
+
+.feature-description {
+    font-size: 14px;
+    color: var(--primary-600);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 36px;
+    }
+
+    .hero-subtitle {
+        font-size: 18px;
+    }
+
+    .upload-section {
+        padding: 32px 24px;
+    }
+
+    .upload-area {
+        padding: 32px 20px;
+    }
+
+    .features {
+        margin-top: 64px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .feature-card {
+        padding: 24px;
+    }
+}
