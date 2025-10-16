@@ -199,7 +199,7 @@ def get_current_user():
         return jsonify({'success': False, 'error': str(e)}), 400
 
 @app.route('/process', methods=['POST'])
-@require_auth
+# @require_auth  # Disabled for now - no authentication required
 def process_pdf():
     """Process uploaded PDF with OCR."""
     print(f"📥 Received request - Method: {request.method}")
@@ -214,8 +214,14 @@ def process_pdf():
 
         file = request.files['file']
         mode = request.form.get('mode', 'chunked')
-        model = 'gpt-5-mini'  # Always use gpt-5-mini
+        ai_model = request.form.get('model', 'gpt-5-mini')  # Get model from form
         preserve_footnotes = request.form.get('preserve_footnotes', 'false').lower() == 'true'
+
+        # Determine provider based on model
+        if 'claude' in ai_model.lower() or 'haiku' in ai_model.lower():
+            provider = 'anthropic'
+        else:
+            provider = 'openai'
 
         if file.filename == '':
             return jsonify({'success': False, 'error': 'No file selected'})
@@ -238,11 +244,11 @@ def process_pdf():
         doc.close()
 
         # Check usage limits (if authenticated)
-        user_id = g.user['id']
-        allowed, error_msg = check_usage_limit(user_id, total_pages)
-        if not allowed:
-            os.unlink(temp_path)
-            return jsonify({'success': False, 'error': error_msg}), 403
+        # user_id = g.user['id']
+        # allowed, error_msg = check_usage_limit(user_id, total_pages)
+        # if not allowed:
+        #     os.unlink(temp_path)
+        #     return jsonify({'success': False, 'error': error_msg}), 403
 
         # Initialize status
         processing_status[job_id] = {
@@ -264,7 +270,7 @@ def process_pdf():
                         'message': message
                     }
 
-                processor = ChunkedOCRProcessor(chunk_size=1)
+                processor = ChunkedOCRProcessor(chunk_size=1, provider=provider, model=ai_model)
                 processor.status_callback = update_status
                 result_path = processor.process_pdf(temp_path, start_page=0, max_pages=total_pages)
 
@@ -272,7 +278,7 @@ def process_pdf():
                 os.unlink(temp_path)
 
                 # Track usage for this user
-                track_usage(user_id, total_pages, job_id, filename, mode)
+                # track_usage(user_id, total_pages, job_id, filename, mode)  # Disabled - no auth
 
                 # Store result
                 result_filename = f"result_{int(time.time())}.md"

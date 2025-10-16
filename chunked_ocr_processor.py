@@ -37,9 +37,10 @@ try:
     import fitz  # PyMuPDF
     from PIL import Image
     from openai import OpenAI
+    import anthropic
 except ImportError as e:
     print(f"❌ Missing dependency: {e}")
-    print("Install with: pip install PyMuPDF Pillow openai python-dotenv")
+    print("Install with: pip install PyMuPDF Pillow openai anthropic python-dotenv")
     sys.exit(1)
 
 # Set up logging
@@ -52,26 +53,42 @@ class ChunkedOCRProcessor:
     Uses GPT-5 Mini with simple prompts for superior results.
     """
 
-    def __init__(self, chunk_size: int = 1, output_dir: str = None, api_key: str = None):
+    def __init__(self, chunk_size: int = 1, output_dir: str = None, api_key: str = None, provider: str = "openai", model: str = None):
         """
         Initialize processor.
 
         Args:
             chunk_size: Pages per chunk (1 = one page at a time, recommended)
             output_dir: Output directory (default: same as input PDF)
-            api_key: OpenAI API key (or set OPENAI_API_KEY env var)
+            api_key: API key (or set OPENAI_API_KEY/ANTHROPIC_API_KEY env var)
+            provider: AI provider - "openai" or "anthropic" (default: "openai")
+            model: Model name (default: gpt-5-mini for OpenAI, claude-haiku-4.5 for Anthropic)
         """
         self.chunk_size = chunk_size
         self.output_dir = output_dir
         self.status_callback = None  # Optional callback for status updates
+        self.provider = provider.lower()
 
-        # Initialize OpenAI client
-        if api_key:
-            self.client = OpenAI(api_key=api_key)
-        elif os.getenv("OPENAI_API_KEY"):
-            self.client = OpenAI()
+        # Initialize AI client based on provider
+        if self.provider == "openai":
+            if api_key:
+                self.client = OpenAI(api_key=api_key)
+            elif os.getenv("OPENAI_API_KEY"):
+                self.client = OpenAI()
+            else:
+                raise ValueError("OpenAI API key required. Set OPENAI_API_KEY environment variable.")
+            self.model = model or "gpt-5-mini"
+
+        elif self.provider == "anthropic":
+            if api_key:
+                self.client = anthropic.Anthropic(api_key=api_key)
+            elif os.getenv("ANTHROPIC_API_KEY"):
+                self.client = anthropic.Anthropic()
+            else:
+                raise ValueError("Anthropic API key required. Set ANTHROPIC_API_KEY environment variable.")
+            self.model = model or "claude-haiku-4-5"
         else:
-            raise ValueError("OpenAI API key required. Set OPENAI_API_KEY environment variable.")
+            raise ValueError(f"Unknown provider: {provider}. Use 'openai' or 'anthropic'")
 
         # Simple OCR prompt
         self.ocr_prompt = "Convert this PDF page to Markdown. Preserve all text, headings, and footnotes (use [^1] format)."
@@ -122,10 +139,26 @@ class ChunkedOCRProcessor:
 
     def analyze_page_chunk(self, images: list) -> dict:
         """
-        Process page images using GPT-5 Mini with simple prompt.
+        Process page images using selected AI provider.
         Args: images: List of (page_number, 'single', PIL.Image) tuples
         Returns: Processing results
         """
+        try:
+            if self.provider == "openai":
+                return self._analyze_with_openai(images)
+            elif self.provider == "anthropic":
+                return self._analyze_with_anthropic(images)
+        except Exception as e:
+            logger.error(f"Error processing pages: {str(e)}")
+            return {
+                "success": False,
+                "pages": [(p, s) for p, s, _ in images],
+                "error": str(e),
+                "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
+            }
+
+    def _analyze_with_openai(self, images: list) -> dict:
+        """Process with OpenAI GPT models."""
         messages = [{
             "role": "user",
             "content": [{"type": "text", "text": self.ocr_prompt}]
@@ -141,27 +174,49 @@ class ChunkedOCRProcessor:
                 "image_url": {"url": f"data:image/png;base64,{img_b64}"}
             })
 
-        try:
-            response = self.client.chat.completions.create(
-                model="gpt-5-mini",
-                max_completion_tokens=16000,
-                messages=messages
-            )
+        response = self.client.chat.completions.create(
+            model=self.model,
+            max_completion_tokens=16000,
+            messages=messages
+        )
 
-            return {
-                "success": True,
-                "pages": [(p, s) for p, s, _ in images],
-                "text": response.choices[0].message.content,
-                "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
-            }
-        except Exception as e:
-            logger.error(f"Error processing pages: {str(e)}")
-            return {
-                "success": False,
-                "pages": [(p, s) for p, s, _ in images],
-                "error": str(e),
-                "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
-            }
+        return {
+            "success": True,
+            "pages": [(p, s) for p, s, _ in images],
+            "text": response.choices[0].message.content,
+            "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
+        }
+
+    def _analyze_with_anthropic(self, images: list) -> dict:
+        """Process with Anthropic Claude models."""
+        content = [{"type": "text", "text": self.ocr_prompt}]
+
+        # Add each image
+        for page_num, side, image in images:
+            img_b64 = self.image_to_base64(image)
+            label = f"PAGE {page_num + 1}"
+            content.append({"type": "text", "text": f"\n\n--- {label} ---\n"})
+            content.append({
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": "image/png",
+                    "data": img_b64,
+                }
+            })
+
+        response = self.client.messages.create(
+            model=self.model,
+            max_tokens=16000,
+            messages=[{"role": "user", "content": content}]
+        )
+
+        return {
+            "success": True,
+            "pages": [(p, s) for p, s, _ in images],
+            "text": response.content[0].text,
+            "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
+        }
 
     def clean_llm_output(self, text: str) -> str:
         """Remove markdown code block wrappers from LLM output."""

@@ -96,6 +96,10 @@ async function processFile() {
     const formData = new FormData();
     formData.append('file', selectedFile);
 
+    // Add selected AI model
+    const model = document.getElementById('modelSelect').value;
+    formData.append('model', model);
+
     try {
         const response = await fetch('/process', {
             method: 'POST',

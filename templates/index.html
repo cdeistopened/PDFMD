@@ -96,6 +96,17 @@
                     </div>
                 </div>
 
+                <div class="upload-section" style="margin-bottom: 24px; padding: 24px;">
+                    <label style="font-size: 14px; font-weight: 600; color: var(--primary-700); margin-bottom: 12px; display: block;">
+                        <i data-feather="cpu" style="width: 16px; height: 16px; vertical-align: middle;"></i>
+                        AI Model
+                    </label>
+                    <select id="modelSelect" style="width: 100%; padding: 12px 16px; border: 1px solid var(--primary-300); border-radius: 8px; font-size: 14px; background: white;">
+                        <option value="gpt-5-mini">GPT-5 Mini (OpenAI) - Fast & Accurate</option>
+                        <option value="claude-haiku-4-5">Claude Haiku 4.5 (Anthropic) - Fastest & $1/$5 per MTok</option>
+                    </select>
+                </div>
+
                 <button
                     class="process-button"
                     id="processBtn"
