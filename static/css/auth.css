@@ -1,115 +1,152 @@
 body {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--stone-50);
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: 32px;
+    min-height: 100vh;
 }
 
 .container {
     background: white;
-    border-radius: 12px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-    max-width: 400px;
+    border-radius: 24px;
+    box-shadow: var(--shadow-lg);
+    max-width: 440px;
     width: 100%;
-    padding: 40px;
+    padding: 56px 48px;
+    border: 1px solid var(--stone-200);
 }
 
 h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #333;
+    font-size: 32px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: var(--stone-900);
+    letter-spacing: -0.02em;
+    text-align: center;
 }
 
 .subtitle {
-    color: #666;
-    margin-bottom: 30px;
-    font-size: 14px;
+    color: var(--stone-500);
+    margin-bottom: 40px;
+    font-size: 15px;
+    text-align: center;
 }
 
+/* Tabs - minimal, refined */
 .tabs {
     display: flex;
-    gap: 10px;
-    margin-bottom: 30px;
-    border-bottom: 2px solid #e0e0e0;
+    gap: 12px;
+    margin-bottom: 40px;
+    padding: 6px;
+    background: var(--stone-100);
+    border-radius: 14px;
 }
 
 .tab {
-    padding: 10px 20px;
+    flex: 1;
+    padding: 12px 20px;
     cursor: pointer;
     border: none;
-    background: none;
-    font-size: 16px;
-    color: #666;
-    transition: all 0.3s;
+    background: transparent;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--stone-600);
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 10px;
+    letter-spacing: -0.01em;
+}
+
+.tab:hover {
+    color: var(--stone-900);
 }
 
 .tab.active {
-    color: #667eea;
-    border-bottom: 2px solid #667eea;
-    margin-bottom: -2px;
+    background: white;
+    color: var(--stone-900);
+    box-shadow: var(--shadow-sm);
 }
 
+/* Form Elements - clean, spacious */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
 }
 
 label {
     display: block;
-    margin-bottom: 8px;
-    color: #333;
+    margin-bottom: 10px;
+    color: var(--stone-700);
     font-weight: 500;
     font-size: 14px;
 }
 
 input {
     width: 100%;
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border 0.3s;
+    padding: 14px 16px;
+    border: 1.5px solid var(--stone-300);
+    border-radius: 12px;
+    font-size: 15px;
+    font-family: inherit;
+    color: var(--stone-700);
+    background: white;
+    transition: all 0.2s ease;
+}
+
+input:hover {
+    border-color: var(--stone-400);
 }
 
 input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--sage-600);
+    box-shadow: 0 0 0 3px var(--sage-100);
 }
 
+/* Submit Button - elegant, minimal */
 button[type="submit"] {
     width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 16px;
+    background: var(--stone-900);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 14px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: transform 0.2s;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    margin-top: 8px;
+    letter-spacing: -0.01em;
 }
 
 button[type="submit"]:hover {
+    background: var(--stone-800);
     transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
 }
 
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Messages - refined */
 .message {
-    padding: 12px;
-    border-radius: 6px;
-    margin-bottom: 20px;
+    padding: 16px 18px;
+    border-radius: 12px;
+    margin-bottom: 24px;
     display: none;
+    font-size: 14px;
 }
 
 .message.error {
-    background: #fee;
-    color: #c33;
-    border: 1px solid #fcc;
+    background: linear-gradient(to bottom, #fef2f2 0%, white 100%);
+    color: var(--error);
+    border: 1px solid #fecaca;
 }
 
 .message.success {
-    background: #efe;
-    color: #3c3;
-    border: 1px solid #cfc;
+    background: linear-gradient(to bottom, #f0fdf4 0%, white 100%);
+    color: var(--success);
+    border: 1px solid #bbf7d0;
 }
 
 .message.show {
@@ -118,4 +155,15 @@ button[type="submit"]:hover {
 
 .hidden {
     display: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .container {
+        padding: 40px 32px;
+    }
+
+    h1 {
+        font-size: 28px;
+    }
 }

@@ -23,30 +23,9 @@
                     <div class="logo">
                         PDF<span class="logo-accent">MD</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 16px">
-                        <a
-                            href="/workbench"
-                            style="
-                                text-decoration: none;
-                                color: var(--accent);
-                                font-size: 14px;
-                                font-weight: 500;
-                            "
-                        >
-                            <i
-                                data-feather="layers"
-                                style="
-                                    width: 16px;
-                                    height: 16px;
-                                    vertical-align: middle;
-                                "
-                            ></i>
-                            Workbench
-                        </a>
-                        <div class="status-indicator">
-                            <div class="status-dot"></div>
-                            <span>System Ready</span>
-                        </div>
+                    <div class="status-indicator">
+                        <div class="status-dot"></div>
+                        <span>Ready</span>
                     </div>
                 </div>
             </div>
@@ -96,12 +75,12 @@
                     </div>
                 </div>
 
-                <div class="upload-section" style="margin-bottom: 24px; padding: 24px;">
-                    <label style="font-size: 14px; font-weight: 600; color: var(--primary-700); margin-bottom: 12px; display: block;">
-                        <i data-feather="cpu" style="width: 16px; height: 16px; vertical-align: middle;"></i>
+                <div class="model-select-section">
+                    <label class="model-select-label">
+                        <i data-feather="cpu" style="width: 16px; height: 16px;"></i>
                         AI Model
                     </label>
-                    <select id="modelSelect" style="width: 100%; padding: 12px 16px; border: 1px solid var(--primary-300); border-radius: 8px; font-size: 14px; background: white;">
+                    <select id="modelSelect" class="model-select">
                         <option value="gpt-5-mini">GPT-5 Mini (OpenAI) - Fast & Accurate</option>
                         <option value="claude-haiku-4-5">Claude Haiku 4.5 (Anthropic) - Fastest & $1/$5 per MTok</option>
                     </select>
@@ -120,50 +99,16 @@
                     Begin Processing
                 </button>
 
-                <div
-                    id="statusProcessing"
-                    class="status-message status-processing"
-                >
-                    <div style="width: 100%">
-                        <div
-                            style="
-                                display: flex;
-                                align-items: center;
-                                gap: 12px;
-                                margin-bottom: 8px;
-                            "
-                        >
+                <div id="statusProcessing" class="status-message status-processing">
+                    <div class="progress-container">
+                        <div class="progress-header">
                             <div class="loading"></div>
-                            <span id="processingMessage"
-                                >Processing your document...</span
-                            >
+                            <span id="processingMessage">Processing your document...</span>
                         </div>
-                        <div
-                            style="
-                                background: var(--primary-200);
-                                border-radius: 8px;
-                                height: 8px;
-                                overflow: hidden;
-                            "
-                        >
-                            <div
-                                id="progressBar"
-                                style="
-                                    background: var(--accent);
-                                    height: 100%;
-                                    width: 0%;
-                                    transition: width 0.3s ease;
-                                "
-                            ></div>
+                        <div class="progress-bar-bg">
+                            <div id="progressBar" class="progress-bar-fill"></div>
                         </div>
-                        <div
-                            id="pageStatus"
-                            style="
-                                font-size: 12px;
-                                color: var(--primary-600);
-                                margin-top: 4px;
-                            "
-                        >
+                        <div id="pageStatus" class="progress-status">
                             Page 0 of 0
                         </div>
                     </div>
@@ -232,79 +177,15 @@
         <script src="/static/js/index.js"></script>
 
         <!-- Markdown Preview Modal -->
-        <div
-            id="previewModal"
-            style="
-                display: none;
-                position: fixed;
-                top: 0;
-                left: 0;
-                right: 0;
-                bottom: 0;
-                background: rgba(0, 0, 0, 0.5);
-                z-index: 1000;
-                align-items: center;
-                justify-content: center;
-                padding: 24px;
-            "
-        >
-            <div
-                style="
-                    background: white;
-                    border-radius: 12px;
-                    max-width: 900px;
-                    width: 100%;
-                    max-height: 80vh;
-                    overflow: hidden;
-                    display: flex;
-                    flex-direction: column;
-                "
-            >
-                <div
-                    style="
-                        padding: 20px 24px;
-                        border-bottom: 1px solid var(--primary-200);
-                        display: flex;
-                        justify-content: space-between;
-                        align-items: center;
-                    "
-                >
-                    <div
-                        style="
-                            font-size: 18px;
-                            font-weight: 600;
-                            color: var(--primary-900);
-                        "
-                    >
-                        Markdown Preview
-                    </div>
-                    <button
-                        onclick="closePreview()"
-                        style="
-                            background: none;
-                            border: none;
-                            cursor: pointer;
-                            padding: 4px;
-                            color: var(--primary-500);
-                        "
-                    >
-                        <i
-                            data-feather="x"
-                            style="width: 20px; height: 20px"
-                        ></i>
+        <div id="previewModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-title">Markdown Preview</div>
+                    <button onclick="closePreview()" class="modal-close">
+                        <i data-feather="x" style="width: 20px; height: 20px"></i>
                     </button>
                 </div>
-                <div
-                    id="previewContent"
-                    style="
-                        padding: 24px;
-                        overflow-y: auto;
-                        flex: 1;
-                        font-size: 15px;
-                        line-height: 1.7;
-                        color: var(--primary-700);
-                    "
-                ></div>
+                <div id="previewContent" class="modal-body markdown-preview"></div>
             </div>
         </div>
 

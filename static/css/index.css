@@ -1,98 +1,113 @@
 .status-indicator {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 14px;
-    color: var(--primary-600);
+    gap: 10px;
+    font-size: 13px;
+    color: var(--stone-500);
+    font-weight: 400;
 }
 
 .status-dot {
-    width: 8px;
-    height: 8px;
+    width: 6px;
+    height: 6px;
     border-radius: 50%;
-    background: var(--success);
+    background: var(--sage-600);
 }
 
-/* Main Content */
+/* Main Content - generous spacing */
 .main {
-    padding: 64px 0;
+    padding: 80px 0 120px;
 }
 
 .hero {
     text-align: center;
-    margin-bottom: 64px;
+    margin-bottom: 80px;
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-title {
-    font-size: 48px;
-    font-weight: 700;
-    color: var(--primary-900);
-    letter-spacing: -0.025em;
-    margin-bottom: 16px;
+    font-size: 56px;
+    font-weight: 500;
+    color: var(--stone-900);
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
     line-height: 1.1;
 }
 
 .hero-subtitle {
-    font-size: 20px;
-    color: var(--primary-600);
-    margin-bottom: 8px;
+    font-size: 22px;
+    color: var(--stone-600);
+    margin-bottom: 12px;
     font-weight: 400;
+    line-height: 1.4;
 }
 
 .hero-description {
     font-size: 16px;
-    color: var(--primary-500);
-    margin-bottom: 48px;
+    color: var(--stone-500);
+    margin-bottom: 0;
+    line-height: 1.6;
 }
 
-/* Upload Section */
+/* Upload Section - card-based, floating */
 .upload-section {
     background: white;
-    border-radius: 16px;
-    border: 1px solid var(--primary-200);
-    padding: 48px;
-    margin-bottom: 48px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    border-radius: 24px;
+    border: 1px solid var(--stone-200);
+    padding: 56px;
+    margin-bottom: 32px;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.upload-section:hover {
+    box-shadow: var(--shadow-md);
 }
 
 .upload-area {
-    border: 2px dashed var(--primary-300);
-    border-radius: 12px;
-    padding: 48px 32px;
+    border: 2px dashed var(--stone-300);
+    border-radius: 20px;
+    padding: 60px 40px;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease;
-    background: var(--primary-50);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--stone-50);
 }
 
 .upload-area:hover {
-    border-color: var(--accent);
-    background: var(--accent-light);
+    border-color: var(--sage-500);
+    background: var(--sage-50);
+    transform: translateY(-2px);
 }
 
 .upload-area.drag-over {
-    border-color: var(--accent);
-    background: var(--accent-light);
+    border-color: var(--sage-600);
+    background: var(--sage-50);
     transform: scale(1.01);
+    box-shadow: 0 0 0 4px var(--sage-100);
 }
 
 .upload-icon {
-    width: 48px;
-    height: 48px;
-    margin: 0 auto 16px;
-    color: var(--primary-400);
+    width: 52px;
+    height: 52px;
+    margin: 0 auto 20px;
+    color: var(--stone-400);
+    stroke-width: 1.5;
 }
 
 .upload-text {
     font-size: 18px;
     font-weight: 500;
-    color: var(--primary-700);
+    color: var(--stone-700);
     margin-bottom: 8px;
+    letter-spacing: -0.01em;
 }
 
 .upload-hint {
-    font-size: 14px;
-    color: var(--primary-500);
+    font-size: 15px;
+    color: var(--stone-500);
 }
 
 #fileInput {
@@ -102,47 +117,55 @@
 .file-selected {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 16px;
-    background: var(--primary-50);
-    border-radius: 8px;
-    margin-top: 16px;
-    border: 1px solid var(--primary-200);
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--sage-50);
+    border-radius: 16px;
+    margin-top: 20px;
+    border: 1px solid var(--sage-100);
 }
 
 .file-icon {
     width: 20px;
     height: 20px;
-    color: var(--accent);
+    color: var(--sage-600);
+    stroke-width: 2;
 }
 
-/* Process Button */
+/* Process Button - refined, elegant */
 .process-button {
     width: 100%;
-    padding: 16px 32px;
-    background: var(--accent);
+    padding: 18px 36px;
+    background: var(--stone-900);
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 16px;
     font-size: 16px;
-    font-weight: 600;
+    font-weight: 500;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 12px;
+    letter-spacing: -0.01em;
 }
 
 .process-button:hover {
-    background: #2563eb;
-    transform: translateY(-1px);
+    background: var(--stone-800);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.process-button:active {
+    transform: translateY(0);
 }
 
 .process-button:disabled {
-    background: var(--primary-300);
+    background: var(--stone-300);
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
 }
 
 .process-button .loading {
@@ -151,20 +174,21 @@
     border: 2px solid rgba(255, 255, 255, 0.3);
     border-top: 2px solid white;
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
-/* Features Grid */
+/* Features Grid - clean, spacious */
 .features {
-    margin-top: 80px;
+    margin-top: 120px;
 }
 
 .features-title {
     text-align: center;
-    font-size: 32px;
-    font-weight: 600;
-    color: var(--primary-900);
-    margin-bottom: 48px;
+    font-size: 36px;
+    font-weight: 500;
+    color: var(--stone-900);
+    margin-bottom: 64px;
+    letter-spacing: -0.02em;
 }
 
 .features-grid {
@@ -175,51 +199,162 @@
 
 .feature-card {
     background: white;
-    border-radius: 12px;
-    padding: 32px;
-    border: 1px solid var(--primary-200);
+    border-radius: 20px;
+    padding: 40px 32px;
+    border: 1px solid var(--stone-200);
     text-align: center;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.feature-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--stone-300);
 }
 
 .feature-icon {
     width: 48px;
     height: 48px;
-    margin: 0 auto 20px;
-    color: var(--accent);
+    margin: 0 auto 24px;
+    color: var(--sage-600);
+    stroke-width: 1.5;
 }
 
 .feature-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--primary-900);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--stone-900);
     margin-bottom: 12px;
+    letter-spacing: -0.01em;
 }
 
 .feature-description {
-    font-size: 14px;
-    color: var(--primary-600);
+    font-size: 15px;
+    color: var(--stone-600);
+    line-height: 1.6;
 }
 
-/* Responsive */
+/* Model Select - refined form styling */
+.model-select-section {
+    background: white;
+    border-radius: 20px;
+    border: 1px solid var(--stone-200);
+    padding: 28px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--shadow-sm);
+}
+
+.model-select-label {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--stone-700);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.model-select {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid var(--stone-300);
+    border-radius: 12px;
+    font-size: 15px;
+    background: white;
+    color: var(--stone-700);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.model-select:hover {
+    border-color: var(--stone-400);
+}
+
+.model-select:focus {
+    outline: none;
+    border-color: var(--sage-600);
+    box-shadow: 0 0 0 3px var(--sage-100);
+}
+
+/* Progress Bar Styling */
+.progress-container {
+    width: 100%;
+}
+
+.progress-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.progress-bar-bg {
+    background: var(--stone-200);
+    border-radius: 10px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar-fill {
+    background: var(--sage-600);
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-status {
+    font-size: 12px;
+    color: var(--stone-600);
+    margin-top: 6px;
+}
+
+/* Links in status messages */
+.status-message a {
+    color: inherit;
+    font-weight: 500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity 0.2s ease;
+}
+
+.status-message a:hover {
+    opacity: 0.7;
+}
+
+/* Responsive refinements */
 @media (max-width: 768px) {
+    .main {
+        padding: 48px 0 80px;
+    }
+
+    .hero {
+        margin-bottom: 56px;
+    }
+
     .hero-title {
-        font-size: 36px;
+        font-size: 40px;
     }
 
     .hero-subtitle {
-        font-size: 18px;
+        font-size: 19px;
     }
 
     .upload-section {
-        padding: 32px 24px;
+        padding: 32px 28px;
     }
 
     .upload-area {
-        padding: 32px 20px;
+        padding: 40px 24px;
     }
 
     .features {
-        margin-top: 64px;
+        margin-top: 80px;
+    }
+
+    .features-title {
+        font-size: 30px;
+        margin-bottom: 48px;
     }
 
     .features-grid {
@@ -228,6 +363,6 @@
     }
 
     .feature-card {
-        padding: 24px;
+        padding: 32px 28px;
     }
 }

@@ -1,19 +1,33 @@
 :root {
-    --primary-50: #f8fafc;
-    --primary-100: #f1f5f9;
-    --primary-200: #e2e8f0;
-    --primary-300: #cbd5e1;
-    --primary-400: #94a3b8;
-    --primary-500: #64748b;
-    --primary-600: #475569;
-    --primary-700: #334155;
-    --primary-800: #1e293b;
-    --primary-900: #0f172a;
-    --accent: #3b82f6;
-    --accent-light: #dbeafe;
-    --success: #10b981;
-    --error: #ef4444;
-    --warning: #f59e0b;
+    /* Refined neutral palette - Swiss spa meets Apple minimalism */
+    --stone-50: #fafaf9;
+    --stone-100: #f5f5f4;
+    --stone-200: #e7e5e4;
+    --stone-300: #d6d3d1;
+    --stone-400: #a8a29e;
+    --stone-500: #78716c;
+    --stone-600: #57534e;
+    --stone-700: #44403c;
+    --stone-800: #292524;
+    --stone-900: #1c1917;
+
+    /* Subtle sage accent - calm, refined */
+    --sage-50: #f6f7f6;
+    --sage-100: #e8ebe8;
+    --sage-500: #7a8a7a;
+    --sage-600: #5f6f5f;
+    --sage-700: #4a5a4a;
+
+    /* Semantic colors */
+    --success: #059669;
+    --error: #dc2626;
+    --warning: #d97706;
+
+    /* Shadows - subtle and soft */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.03);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
 }
 
 * {
@@ -27,29 +41,28 @@ body {
         "Inter",
         -apple-system,
         BlinkMacSystemFont,
+        "SF Pro Display",
         sans-serif;
-    background: linear-gradient(
-        135deg,
-        var(--primary-50) 0%,
-        #ffffff 100%
-    );
-    color: var(--primary-700);
-    line-height: 1.6;
+    background: var(--stone-50);
+    color: var(--stone-700);
+    line-height: 1.65;
     min-height: 100vh;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 .container {
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 32px;
 }
 
-/* Header */
+/* Header - floating, minimal */
 .header {
-    padding: 32px 0;
-    border-bottom: 1px solid var(--primary-200);
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(10px);
+    padding: 40px 0;
+    background: transparent;
+    position: relative;
 }
 
 .header-content {
@@ -59,52 +72,65 @@ body {
 }
 
 .logo {
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--primary-900);
-    letter-spacing: -0.025em;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--stone-900);
+    letter-spacing: -0.02em;
 }
 
 .logo-accent {
-    color: var(--accent);
+    color: var(--sage-600);
+    font-weight: 400;
 }
 
-/* Status Messages */
+/* Status Messages - softer, more refined */
 .status-message {
-    padding: 16px 20px;
-    border-radius: 8px;
-    margin: 16px 0;
+    padding: 20px 24px;
+    border-radius: 16px;
+    margin: 24px 0;
     display: none;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
+    background: white;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--stone-200);
 }
 
 .status-success {
-    background: #ecfdf5;
-    border: 1px solid #d1fae5;
-    color: #065f46;
+    background: linear-gradient(to bottom, #f0fdf4 0%, white 100%);
+    border-color: #bbf7d0;
+}
+
+.status-success i {
+    color: var(--success);
 }
 
 .status-error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #991b1b;
+    background: linear-gradient(to bottom, #fef2f2 0%, white 100%);
+    border-color: #fecaca;
+}
+
+.status-error i {
+    color: var(--error);
 }
 
 .status-processing {
-    background: #eff6ff;
-    border: 1px solid #dbeafe;
-    color: #1e40af;
+    background: linear-gradient(to bottom, var(--sage-50) 0%, white 100%);
+    border-color: var(--sage-100);
 }
 
-/* Loading Animation */
+.status-processing i {
+    color: var(--sage-600);
+}
+
+/* Loading Animation - smooth and gentle */
 .loading {
     width: 20px;
     height: 20px;
-    border: 2px solid rgba(255, 255, 255, 0.3);
-    border-top: 2px solid white;
+    border: 2px solid var(--stone-200);
+    border-top: 2px solid var(--sage-600);
     border-radius: 50%;
-    animation: spin 1s linear infinite;
+    animation: spin 1.2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 @keyframes spin {
@@ -116,7 +142,7 @@ body {
     }
 }
 
-/* Modal */
+/* Modal - elegant and spacious */
 .modal {
     display: none;
     position: fixed;
@@ -124,11 +150,22 @@ body {
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgba(28, 25, 23, 0.4);
+    backdrop-filter: blur(8px);
     z-index: 1000;
     align-items: center;
     justify-content: center;
-    padding: 24px;
+    padding: 32px;
+    animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 .modal.active {
@@ -137,86 +174,137 @@ body {
 
 .modal-content {
     background: white;
-    border-radius: 12px;
+    border-radius: 20px;
     max-width: 900px;
     width: 100%;
-    max-height: 80vh;
+    max-height: 85vh;
     overflow: hidden;
     display: flex;
     flex-direction: column;
+    box-shadow: var(--shadow-xl);
+    animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--primary-200);
+    padding: 28px 32px;
+    border-bottom: 1px solid var(--stone-200);
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
 .modal-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--primary-900);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--stone-900);
+    letter-spacing: -0.01em;
 }
 
 .modal-close {
     background: none;
     border: none;
     cursor: pointer;
-    padding: 4px;
-    color: var(--primary-500);
+    padding: 8px;
+    color: var(--stone-400);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.modal-close:hover {
+    background: var(--stone-100);
+    color: var(--stone-600);
 }
 
 .modal-body {
-    padding: 24px;
+    padding: 32px;
     overflow-y: auto;
     flex: 1;
 }
 
-/* Markdown Preview */
+/* Markdown Preview - clean typography */
 .markdown-preview {
-    font-size: 15px;
-    line-height: 1.7;
-    color: var(--primary-700);
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--stone-700);
 }
 
 .markdown-preview h1 {
-    font-size: 28px;
-    margin: 24px 0 16px;
+    font-size: 32px;
+    font-weight: 500;
+    margin: 32px 0 20px;
+    color: var(--stone-900);
+    letter-spacing: -0.02em;
 }
 
 .markdown-preview h2 {
-    font-size: 24px;
-    margin: 20px 0 12px;
+    font-size: 26px;
+    font-weight: 500;
+    margin: 28px 0 16px;
+    color: var(--stone-900);
+    letter-spacing: -0.01em;
 }
 
 .markdown-preview h3 {
-    font-size: 20px;
-    margin: 16px 0 8px;
+    font-size: 22px;
+    font-weight: 500;
+    margin: 24px 0 12px;
+    color: var(--stone-800);
 }
 
 .markdown-preview p {
-    margin: 12px 0;
+    margin: 16px 0;
 }
 
 .markdown-preview code {
-    background: var(--primary-100);
-    padding: 2px 6px;
-    border-radius: 4px;
-    font-size: 14px;
+    background: var(--stone-100);
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
 }
 
 .markdown-preview pre {
-    background: var(--primary-100);
-    padding: 16px;
-    border-radius: 8px;
+    background: var(--stone-100);
+    padding: 20px;
+    border-radius: 12px;
     overflow-x: auto;
+    margin: 16px 0;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .container {
-        padding: 0 16px;
+        padding: 0 20px;
+    }
+
+    .header {
+        padding: 24px 0;
+    }
+
+    .modal {
+        padding: 16px;
+    }
+
+    .modal-content {
+        border-radius: 16px;
+    }
+
+    .modal-header {
+        padding: 20px 24px;
+    }
+
+    .modal-body {
+        padding: 24px;
     }
 }
