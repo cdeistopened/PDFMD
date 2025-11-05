@@ -35,15 +35,10 @@
             <div class="container">
                 <div class="hero">
                     <h1 class="hero-title">
-                        AI-Powered OCR That Actually Works
+                        Turn any PDF into Markdown
                     </h1>
                     <p class="hero-subtitle">
-                        Convert scanned documents to perfectly accurate Markdown
-                    </p>
-                    <p class="hero-description">
-                        Outperforms ABBYY FineReader and Adobe Acrobat's OCR
-                        capabilities. Preserves footnotes, tables, and
-                        formatting.
+                        Perfect accuracy. Perfect formatting. Every time.
                     </p>
                 </div>
 
@@ -56,8 +51,8 @@
                         ondragleave="handleDragLeave(event)"
                     >
                         <i data-feather="upload" class="upload-icon"></i>
-                        <div class="upload-text">Select PDF document</div>
-                        <div class="upload-hint">or drag and drop here</div>
+                        <div class="upload-text">Drop your PDF here</div>
+                        <div class="upload-hint">or click to browse</div>
                         <input
                             type="file"
                             id="fileInput"
@@ -78,11 +73,11 @@
                 <div class="model-select-section">
                     <label class="model-select-label">
                         <i data-feather="cpu" style="width: 16px; height: 16px;"></i>
-                        AI Model
+                        Choose Model
                     </label>
                     <select id="modelSelect" class="model-select">
-                        <option value="gpt-5-mini">GPT-5 Mini (OpenAI) - Fast & Accurate</option>
-                        <option value="claude-haiku-4-5">Claude Haiku 4.5 (Anthropic) - Fastest & $1/$5 per MTok</option>
+                        <option value="gpt-5-mini">GPT-5 Mini — Fast & Accurate</option>
+                        <option value="claude-haiku-4-5">Claude Haiku 4.5 — Fastest</option>
                     </select>
                 </div>
 
@@ -96,7 +91,7 @@
                         data-feather="play"
                         style="width: 20px; height: 20px"
                     ></i>
-                    Begin Processing
+                    Convert to Markdown
                 </button>
 
                 <div id="statusProcessing" class="status-message status-processing">
@@ -142,7 +137,7 @@
                 </div>
 
                 <div class="features">
-                    <h2 class="features-title">Why Choose AI-Powered OCR?</h2>
+                    <h2 class="features-title">What makes it special</h2>
                     <div class="features-grid">
                         <div class="feature-card">
                             <i data-feather="zap" class="feature-icon"></i>

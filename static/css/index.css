@@ -8,10 +8,20 @@
 }
 
 .status-dot {
-    width: 6px;
-    height: 6px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: var(--sage-600);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
 }
 
 /* Main Content - generous spacing */
@@ -21,19 +31,19 @@
 
 .hero {
     text-align: center;
-    margin-bottom: 80px;
-    max-width: 720px;
+    margin-bottom: 72px;
+    max-width: 680px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .hero-title {
     font-size: 56px;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--stone-900);
     letter-spacing: -0.03em;
-    margin-bottom: 24px;
-    line-height: 1.1;
+    margin-bottom: 20px;
+    line-height: 1.05;
 }
 
 .hero-subtitle {
@@ -162,10 +172,12 @@
 }
 
 .process-button:disabled {
-    background: var(--stone-300);
+    background: var(--stone-200);
+    color: var(--stone-400);
     cursor: not-allowed;
     transform: none;
     box-shadow: none;
+    opacity: 0.6;
 }
 
 .process-button .loading {
@@ -184,10 +196,10 @@
 
 .features-title {
     text-align: center;
-    font-size: 36px;
-    font-weight: 500;
+    font-size: 32px;
+    font-weight: 600;
     color: var(--stone-900);
-    margin-bottom: 64px;
+    margin-bottom: 56px;
     letter-spacing: -0.02em;
 }
 
@@ -234,14 +246,19 @@
     line-height: 1.6;
 }
 
-/* Model Select - refined form styling */
+/* Model Select - integrated into upload flow */
 .model-select-section {
     background: white;
     border-radius: 20px;
     border: 1px solid var(--stone-200);
-    padding: 28px 32px;
-    margin-bottom: 24px;
+    padding: 24px 32px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-sm);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.model-select-section:hover {
+    box-shadow: var(--shadow-md);
 }
 
 .model-select-label {
