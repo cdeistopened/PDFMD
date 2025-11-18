@@ -31,7 +31,10 @@ except ImportError:
                     key, value = line.strip().split('=', 1)
                     os.environ[key] = value
 
-print("🔑 API Keys:", "✅ Loaded" if os.getenv("OPENAI_API_KEY") else "❌ Missing")
+print("🔑 API Keys:")
+print(f"  - OpenAI: {'✅ Loaded' if os.getenv('OPENAI_API_KEY') else '❌ Missing'}")
+print(f"  - Anthropic: {'✅ Loaded' if os.getenv('ANTHROPIC_API_KEY') else '❌ Missing'}")
+print(f"  - Google: {'✅ Loaded' if os.getenv('GOOGLE_API_KEY') else '❌ Missing'}")
 
 try:
     import fitz  # PyMuPDF
