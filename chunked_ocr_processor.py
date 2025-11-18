@@ -38,9 +38,10 @@ try:
     from PIL import Image
     from openai import OpenAI
     import anthropic
+    import google.generativeai as genai
 except ImportError as e:
     print(f"❌ Missing dependency: {e}")
-    print("Install with: pip install PyMuPDF Pillow openai anthropic python-dotenv")
+    print("Install with: pip install PyMuPDF Pillow openai anthropic google-generativeai python-dotenv")
     sys.exit(1)
 
 # Set up logging
@@ -60,9 +61,9 @@ class ChunkedOCRProcessor:
         Args:
             chunk_size: Pages per chunk (1 = one page at a time, recommended)
             output_dir: Output directory (default: same as input PDF)
-            api_key: API key (or set OPENAI_API_KEY/ANTHROPIC_API_KEY env var)
-            provider: AI provider - "openai" or "anthropic" (default: "openai")
-            model: Model name (default: gpt-5-mini for OpenAI, claude-haiku-4.5 for Anthropic)
+            api_key: API key (or set OPENAI_API_KEY/ANTHROPIC_API_KEY/GOOGLE_API_KEY env var)
+            provider: AI provider - "openai", "anthropic", or "google" (default: "openai")
+            model: Model name (default: gpt-5-mini for OpenAI, claude-haiku-4.5 for Anthropic, gemini-3-pro-preview-11-2025 for Google)
         """
         self.chunk_size = chunk_size
         self.output_dir = output_dir
@@ -87,8 +88,18 @@ class ChunkedOCRProcessor:
             else:
                 raise ValueError("Anthropic API key required. Set ANTHROPIC_API_KEY environment variable.")
             self.model = model or "claude-haiku-4-5"
+
+        elif self.provider == "google":
+            if api_key:
+                genai.configure(api_key=api_key)
+            elif os.getenv("GOOGLE_API_KEY"):
+                genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+            else:
+                raise ValueError("Google API key required. Set GOOGLE_API_KEY environment variable.")
+            self.model = model or "gemini-3-pro-preview-11-2025"
+            self.client = genai.GenerativeModel(self.model)
         else:
-            raise ValueError(f"Unknown provider: {provider}. Use 'openai' or 'anthropic'")
+            raise ValueError(f"Unknown provider: {provider}. Use 'openai', 'anthropic', or 'google'")
 
         # Simple OCR prompt
         self.ocr_prompt = "Convert this PDF page to Markdown. Preserve all text, headings, and footnotes (use [^1] format)."
@@ -148,6 +159,8 @@ class ChunkedOCRProcessor:
                 return self._analyze_with_openai(images)
             elif self.provider == "anthropic":
                 return self._analyze_with_anthropic(images)
+            elif self.provider == "google":
+                return self._analyze_with_google(images)
         except Exception as e:
             logger.error(f"Error processing pages: {str(e)}")
             return {
@@ -215,6 +228,30 @@ class ChunkedOCRProcessor:
             "success": True,
             "pages": [(p, s) for p, s, _ in images],
             "text": response.content[0].text,
+            "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
+        }
+
+    def _analyze_with_google(self, images: list) -> dict:
+        """Process with Google Gemini models."""
+        # Build content parts: text prompt followed by images
+        content_parts = [self.ocr_prompt]
+
+        for page_num, side, image in images:
+            label = f"PAGE {page_num + 1}"
+            content_parts.append(f"\n\n--- {label} ---\n")
+            content_parts.append(image)
+
+        response = self.client.generate_content(
+            content_parts,
+            generation_config={
+                'max_output_tokens': 16000,
+            }
+        )
+
+        return {
+            "success": True,
+            "pages": [(p, s) for p, s, _ in images],
+            "text": response.text,
             "page_range": f"{images[0][0] + 1}-{images[-1][0] + 1}"
         }
 

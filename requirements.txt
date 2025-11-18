@@ -9,6 +9,7 @@ Pillow>=10.0.0
 # AI/OCR
 openai>=1.12.0
 anthropic>=0.7.0
+google-generativeai>=0.3.0
 
 # Environment and utilities
 python-dotenv>=1.0.0

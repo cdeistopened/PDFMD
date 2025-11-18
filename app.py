@@ -220,6 +220,8 @@ def process_pdf():
         # Determine provider based on model
         if 'claude' in ai_model.lower() or 'haiku' in ai_model.lower():
             provider = 'anthropic'
+        elif 'gemini' in ai_model.lower():
+            provider = 'google'
         else:
             provider = 'openai'
 
@@ -343,6 +345,7 @@ def workbench_upload():
 
         file = request.files['file']
         batch_size = int(request.form.get('batch_size', 5))
+        ai_model = request.form.get('model', 'claude-haiku-4-5')  # Get model from form
 
         if file.filename == '':
             return jsonify({'success': False, 'error': 'No file selected'})
@@ -381,6 +384,7 @@ def workbench_upload():
             'pdf_path': temp_path,
             'total_pages': total_pages,
             'batch_size': batch_size,
+            'model': ai_model,
             'batches': batches,
             'created_at': time.time()
         }
@@ -458,11 +462,22 @@ def workbench_process_batch(doc_id, batch_index):
 
                 print(f"📝 Mode: {processing_mode}, Pages: {batch['start']}-{batch['end']}")
 
+                # Get model and determine provider
+                ai_model = doc.get('model', 'claude-haiku-4-5')
+                if 'claude' in ai_model.lower() or 'haiku' in ai_model.lower():
+                    provider = 'anthropic'
+                elif 'gemini' in ai_model.lower():
+                    provider = 'google'
+                else:
+                    provider = 'openai'
+
+                print(f"🤖 Using model: {ai_model} (provider: {provider})")
+
                 # Create output file path
                 output_file = tempfile.mktemp(suffix='.md')
                 print(f"💾 Output file: {output_file}")
 
-                processor = ChunkedOCRProcessor(chunk_size=1)
+                processor = ChunkedOCRProcessor(chunk_size=1, provider=provider, model=ai_model)
                 processor.status_callback = update_status
                 # Convert to 0-indexed
                 result_path = processor.process_pdf(
