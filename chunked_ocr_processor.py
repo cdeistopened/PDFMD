@@ -102,7 +102,7 @@ class ChunkedOCRProcessor:
                 genai.configure(api_key=google_key)
             else:
                 raise ValueError("Google API key required. Set GOOGLE_API_KEY or GEMINI_API_KEY environment variable.")
-            self.model = model or "gemini-3-pro-preview-11-2025"
+            self.model = model or "gemini-2.0-flash-exp"
             self.client = genai.GenerativeModel(self.model)
         else:
             raise ValueError(f"Unknown provider: {provider}. Use 'openai', 'anthropic', or 'google'")
