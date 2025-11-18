@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>PDFMD – Professional Document Processing</title>
         <link
-            href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+            href="https://fonts.googleapis.com/css2?family=Crimson+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
         <link
@@ -35,10 +35,10 @@
             <div class="container">
                 <div class="hero">
                     <h1 class="hero-title">
-                        Turn any PDF into Markdown
+                        PDF to Markdown
                     </h1>
                     <p class="hero-subtitle">
-                        Perfect accuracy. Perfect formatting. Every time.
+                        Extract text from scanned documents with machine precision.
                     </p>
                 </div>
 
@@ -51,8 +51,8 @@
                         ondragleave="handleDragLeave(event)"
                     >
                         <i data-feather="upload" class="upload-icon"></i>
-                        <div class="upload-text">Drop your PDF here</div>
-                        <div class="upload-hint">or click to browse</div>
+                        <div class="upload-text">Upload Document</div>
+                        <div class="upload-hint">Drop PDF or click to select</div>
                         <input
                             type="file"
                             id="fileInput"
@@ -78,8 +78,8 @@
                                 Model
                             </label>
                             <select id="modelSelect" class="model-select">
-                                <option value="claude-haiku-4-5">Claude Haiku 4.5 — Fastest</option>
-                                <option value="gpt-5-mini">GPT-5 Mini — Fast & Accurate</option>
+                                <option value="claude-haiku-4-5">Claude Haiku 4.5 [Default]</option>
+                                <option value="gpt-5-mini">GPT-5 Mini [Alternative]</option>
                             </select>
                         </div>
                         <div class="setting-group">
@@ -100,9 +100,9 @@
                 >
                     <i
                         data-feather="play"
-                        style="width: 20px; height: 20px"
+                        style="width: 18px; height: 18px"
                     ></i>
-                    Convert to Markdown
+                    Process Document
                 </button>
 
                 <div id="statusProcessing" class="status-message status-processing">
@@ -164,31 +164,30 @@
                 </div>
 
                 <div class="features">
-                    <h2 class="features-title">What makes it special</h2>
+                    <h2 class="features-title">Technical Specifications</h2>
                     <div class="features-grid">
                         <div class="feature-card">
-                            <i data-feather="zap" class="feature-icon"></i>
-                            <div class="feature-title">Superior Accuracy</div>
+                            <i data-feather="cpu" class="feature-icon"></i>
+                            <div class="feature-title">Vision Models</div>
                             <div class="feature-description">
-                                GPT-5 Mini understands context, fixing errors
-                                that trip up traditional OCR engines
+                                Claude Haiku 4.5 and GPT-5 Mini process document images
+                                with contextual understanding beyond traditional OCR.
                             </div>
                         </div>
                         <div class="feature-card">
-                            <i data-feather="bookmark" class="feature-icon"></i>
-                            <div class="feature-title">Smart Footnotes</div>
+                            <i data-feather="layers" class="feature-icon"></i>
+                            <div class="feature-title">Batch Processing</div>
                             <div class="feature-description">
-                                Automatically detects and converts footnotes to
-                                proper Markdown format with preserved references
+                                Documents split into configurable page batches.
+                                Process large PDFs without timeout failures.
                             </div>
                         </div>
                         <div class="feature-card">
-                            <i data-feather="layout" class="feature-icon"></i>
-                            <div class="feature-title">Structure Intact</div>
+                            <i data-feather="file-text" class="feature-icon"></i>
+                            <div class="feature-title">Format Retention</div>
                             <div class="feature-description">
-                                Preserves headings, tables, lists, and
-                                formatting—perfect for academic papers and
-                                reports
+                                Preserves document structure including headings,
+                                tables, footnotes, and multi-column layouts.
                             </div>
                         </div>
                     </div>
