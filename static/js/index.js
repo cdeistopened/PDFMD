@@ -69,7 +69,13 @@ async function processFile() {
         const result = await response.json();
 
         if (result.success) {
-            currentDocument = result.document;
+            // Backend returns doc_id, filename, total_pages, batches directly
+            currentDocument = {
+                doc_id: result.doc_id,
+                filename: result.filename,
+                total_pages: result.total_pages,
+                batches: result.batches
+            };
             renderBatchProgress();
 
             // Auto-process all batches
