@@ -34,7 +34,8 @@ except ImportError:
 print("🔑 API Keys:")
 print(f"  - OpenAI: {'✅ Loaded' if os.getenv('OPENAI_API_KEY') else '❌ Missing'}")
 print(f"  - Anthropic: {'✅ Loaded' if os.getenv('ANTHROPIC_API_KEY') else '❌ Missing'}")
-print(f"  - Google: {'✅ Loaded' if os.getenv('GOOGLE_API_KEY') else '❌ Missing'}")
+google_key_present = os.getenv('GOOGLE_API_KEY') or os.getenv('GEMINI_API_KEY')
+print(f"  - Google: {'✅ Loaded' if google_key_present else '❌ Missing'}")
 
 try:
     import fitz  # PyMuPDF
@@ -95,10 +96,12 @@ class ChunkedOCRProcessor:
         elif self.provider == "google":
             if api_key:
                 genai.configure(api_key=api_key)
-            elif os.getenv("GOOGLE_API_KEY"):
-                genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+            elif os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY"):
+                # Support both GOOGLE_API_KEY and GEMINI_API_KEY
+                google_key = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+                genai.configure(api_key=google_key)
             else:
-                raise ValueError("Google API key required. Set GOOGLE_API_KEY environment variable.")
+                raise ValueError("Google API key required. Set GOOGLE_API_KEY or GEMINI_API_KEY environment variable.")
             self.model = model or "gemini-3-pro-preview-11-2025"
             self.client = genai.GenerativeModel(self.model)
         else:
