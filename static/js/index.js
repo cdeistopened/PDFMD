@@ -59,6 +59,7 @@ async function processFile() {
     const formData = new FormData();
     formData.append('file', selectedFile);
     formData.append('batch_size', document.getElementById('batchSize').value);
+    formData.append('model', document.getElementById('modelSelect').value);
 
     try {
         const response = await fetch('/workbench/upload', {
